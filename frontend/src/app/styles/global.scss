@@ -28,7 +28,9 @@ input, select {
 button{
   cursor: pointer;
 }
-
+select, button{
+  color: var(--app-main-black);
+}
 input[type="number"]::-webkit-inner-spin-button,
 input[type="number"]::-webkit-outer-spin-button {
   -webkit-appearance: none;
