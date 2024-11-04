@@ -1,0 +1,20 @@
+.free-search{
+  &__input-text--indent{
+    text-indent: 25px;
+  }
+  &__magnifier-icon{
+    display: block;
+    position: absolute;
+    left:16px;
+    top:10px;
+    }
+  &__question-icon{
+    display: block;
+    position: absolute;
+    right:16px;
+    top:10px;
+  }
+  &__container{
+    position: relative;
+  }
+}

@@ -1,0 +1,137 @@
+@import "@app/styles/component/fonts";
+
+*{
+  font-family: $fontMontserrat;
+}
+html {
+  font-size: 10px;
+
+  @media (max-width: 320px) {
+    font-size: 7px;
+  }
+}
+body{
+  color:var(--app-main-black);
+  font-size: 1.6rem;
+  background-color: var(--app-white);
+}
+a {
+  text-decoration: none;
+  outline: none;
+}
+h1, h2, p{
+  margin:0;
+}
+input, select {
+  outline:none;
+}
+button{
+  cursor: pointer;
+}
+
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+input[type="number"] {
+  -moz-appearance: textfield;
+}
+
+.container {
+  max-width: 1600px;
+  margin: 0 auto;
+  padding: 0 2rem;
+}
+.page{
+  position: relative;
+}
+.title{
+  font-size: clamp(16px, 4vw, 36px);
+  font-weight: 600;
+  line-height: 22px;
+}
+.title-middle{
+  font-size: 1.6rem;
+  font-weight: 600;
+}
+.label{
+  padding: 0.4rem 0.8rem 0.4rem 0.8rem;
+  font-size: 1.1rem;
+  line-height: 1;
+  color: var(--app-white);
+  background-color: var(--ac-light-blue);
+  text-align: right;
+  white-space: nowrap;
+  vertical-align: baseline;
+  border-radius: 4px;
+}
+.text{
+  font-size: 1.4rem;
+}
+.form-input{
+  @include inputOrSelect;
+  text-indent: 30px;
+}
+.form-select {
+  @include inputOrSelect;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  -ms-appearance: none;
+  background-image: url(@app/assets/images/icons/different/chevron.bottom.svg);
+  background-repeat: no-repeat;
+  background-position: calc(100% - 15px) center;
+}
+.input-placeholder{
+  @include placeholder(var(--app-gray), 1.5rem);
+}
+.form-label{
+  display: block;
+  font-size: 1.4rem;
+  font-weight: 600;
+  line-height: 14px;
+  margin-bottom: 0.8rem;
+}
+.form-group{
+  margin-top:2.2rem;
+}
+.circle{
+  width:16px;
+  height: 16px;
+  display: block;
+  border-radius: 50%;
+  line-height: 14pt;
+  text-align: center;
+  color:var(--app-white);
+}
+.title-page{
+  &__container{
+    margin-bottom:8.2rem;
+    display: flex;
+    align-items: center;
+    column-gap: 1.4rem;
+  }
+}
+.mobile-show{
+  display: none;
+}
+.flex-row{
+  display: flex;
+  align-items: center;
+  gap:0.5rem;
+}
+.hidden{
+  display: none;
+}
+@media (max-width: 480px) {
+  body{
+    background-color: var(--app-light-gray);
+  }
+  .header{
+    display: none;
+  }
+  .mobile-show{
+    display: block;
+  }
+}

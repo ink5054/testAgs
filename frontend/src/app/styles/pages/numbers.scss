@@ -1,0 +1,301 @@
+@import "@app/styles/component/free-search";
+@import "@app/styles/component/operators";
+@import "@app/styles/component/preloader";
+@import "@app/styles/component/icons";
+@import "@app/styles/component/btn";
+@import "@app/styles/component/overlay";
+@import "@app/styles/component/number-item";
+@import "@app/styles/component/button-block";
+
+.numbers{
+
+  &__container{
+    display: flex;
+    justify-content: space-between;
+    gap:2rem;
+  }
+  &__container-left{
+    width:390px;
+  }
+  &__container-right{
+    width:1210px;
+  }
+
+  &__form-title--margin{
+    margin-bottom: 0.6rem;
+  }
+  &__download-btn{
+    margin: 2rem 0;
+    text-align: center;
+
+    > button{
+      border: 0;
+      background: unset;
+      font-size: 1.6rem;
+      font-weight: 500;
+      color:var(--app-gray);
+    }
+  }
+
+  &__count{
+    margin-bottom:0.5rem;
+    font-size:1.4rem;
+  }
+
+  &__filters{
+    position: relative;
+    border-radius: 8px;
+    border: 1px solid var(--app-border-gray);
+    padding:1.6rem;
+    min-width: 390px;
+    background-color: var(--app-white);
+
+    &-description{
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 1rem;
+
+     .btn-back{
+        position: absolute;
+        top: 10px;
+        left: 20px;
+      }
+    }
+    &__button-back{
+      position: absolute;
+    }
+    &__button-clear{
+      font-size: 1.1rem;
+      display: flex;
+      align-items: center;
+      gap:0.1rem;
+    }
+
+    &-select-container{
+      display: flex;
+      justify-content: space-between;
+
+      gap:0.8rem;
+
+      >div{
+        width:50%;
+      }
+    }
+
+    .numbers__filter-cost{
+      > div{
+        display: flex;
+        gap:0.8rem;
+
+        > input{
+          width:50%;
+          text-align: center;
+        }
+      }
+    }
+    &-form{
+      &-select{
+        display: flex;
+        flex-wrap: nowrap;
+        gap: 0.6rem;
+        > div{
+          width:50%;
+        }
+      }
+    }
+  }
+  &__price-search{
+    > div{
+      gap: 0.6rem;
+    }
+  }
+  &__btn-form--blue{
+    background-color: var(--app-blue);
+    color: var(--app-white);
+  }
+  &__carousel-circle{
+    width: 14px;
+    height: 14px;
+    line-height: 11pt;
+    color: var(--app-blue);
+    background-color: var(--app-white);
+    font-size:0.8rem;
+  }
+  &__container_button{
+    margin-top: 3rem;
+  }
+
+  &__button-block > button{
+    padding: 0.8rem 0.6rem;
+  }
+  &__content{
+    &-container{
+      margin-top: -5rem;
+    }
+    &-list{
+      display: flex;
+      flex-direction: column;
+      gap:0.4rem;
+    }
+    &-top{
+      margin-top:1.5rem;
+      margin-bottom:0.5rem;
+    }
+    &-operator{
+      width:10px;
+      height:10px;
+      background-size: 95%;
+      display: block;
+    }
+  }
+  &__operator-icon{
+    width: 22px;
+    height: 22px;
+    padding: 1.5rem 2.2rem;
+    display: block;
+    background-position: center center;
+  }
+  &__active--violet{
+    outline: 1px solid var(--app-violet);
+  }
+  &__overlay--visibility{
+    display: block;
+    position: relative;
+    height: auto;
+  }
+  &__splide{
+    font-size: 1.2rem;
+    margin-bottom:1.6rem;
+    ul{
+      display: flex;
+      gap:0.8rem;
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .numbers{
+    &__container {
+      flex-direction: column;
+      gap:2rem;
+    }
+    &__container-right {
+      width: 100%;
+    }
+    &__content-container {
+      margin-top: -3rem;
+    }
+  }
+
+}
+
+@media (max-width: 480px) {
+  .number-item__city {
+    max-width: 146px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+  .label{
+    font-size: 0.9rem;
+  }
+  .title-page.container{
+    padding: 0;
+  }
+  .title-page{
+    .title-page__container{
+      padding: 10px 20px;
+      display: block;
+      text-align: center;
+
+      [data-icon=chevron]{
+        position: absolute;
+      }
+    }
+  }
+  .numbers__container-left {
+    width: 100%;
+  }
+  .numbers.container{
+    padding: 0;
+    position: absolute;
+    width: 100%;
+    height: auto;
+    top: 40px;
+    background-color: var(--app-white);
+    border-radius: 22px 22px 0 0;
+  }
+  .numbers{
+    &__container {
+      margin-bottom: 50px;
+    }
+    &__filters{
+      width:100%;
+      min-width: unset;
+      height: 100vh;
+      border:0;
+
+      &-description{
+        margin-top: -0.5rem;
+
+        > div:nth-of-type(1){
+          text-align: center;
+          display: block;
+          width:100%;
+        }
+        > div:nth-of-type(2){
+          width:20%;
+          order: 3;
+        }
+        > div:nth-of-type(3){
+          width:70%;
+
+          .form-subtitle{
+            text-align: left;
+          }
+        }
+      }
+    }
+    &__content-container{
+      padding: 2rem 2rem 0 2rem;
+      margin-top:-2rem;
+    }
+
+    .filters-btn{
+      display: flex;
+    }
+    &__nav{
+      justify-content: space-between;
+    }
+
+    &__filters-top{
+      [data-icon=chevron]{
+        position: absolute;
+      }
+    }
+    &__circle--blue-size{
+      background-color: var(--app-blue);
+      font-size:1rem;
+    }
+    &__content{
+      &-top{
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-top:1.6rem;
+      }
+    }
+    &__container_button{
+      width:100%;
+      position: fixed;
+      left:0;
+      bottom:0;
+      padding: 1.6rem;
+      box-shadow: 0 -6px 4px -4px var(--app-shadow);
+    }
+    &__overlay--visibility{
+      display: none;
+    }
+  }
+}

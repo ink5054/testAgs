@@ -1,0 +1,30 @@
+{
+  "name": "ag/test_task",
+  "type": "library",
+  "minimum-stability": "stable",
+  "config": {
+    "platform": {
+      "php": "8.3.6",
+      "ext-json": "8.3.6",
+      "ext-calendar": "8.3.6",
+      "ext-curl": "8.3.6",
+      "ext-zip": "8.3.6",
+      "ext-gd": "8.3.6",
+      "ext-fileinfo": "8.3.6",
+      "ext-imagick": "8.3.6",
+      "ext-mysqli": "8.3.6",
+      "ext-iconv": "8.3.6",
+      "ext-zlib": "8.3.6",
+      "ext-posix": "8.3.6",
+      "ext-pcntl": "8.3.6"
+    }
+  },
+  "require": {
+    "twig/twig": "^3.10.3",
+    "doctrine/dbal": "^4.0.2",
+    "slim/psr7": "^1.6",
+    "slim/slim": "4.*",
+    "vlucas/phpdotenv": "^5.6",
+    "fakerphp/faker": "^1.23"
+  }
+}

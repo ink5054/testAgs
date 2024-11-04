@@ -1,0 +1,170 @@
+{% extends 'structure/global.twig' %}
+
+{% block title %}Номера{% endblock %}
+
+{% block head %}
+    {{ parent() }}
+    {% include 'webpack-imports-app.twig' %}
+{% endblock %}
+
+{# TODO HTML разметка самой страницы #}
+{% block body %}
+    <section class="page">
+
+        <div class="title-page container">
+            <div class="title-page__container">
+                <div class="btn-back" data-icon="chevron"></div>
+                <h1 class="title">
+                    Красивые номера
+                </h1>
+            </div>
+        </div>
+
+        <div class="numbers container">
+            <div class="numbers__container">
+
+                <div class="numbers__container-left">
+
+                    <div class="numbers__filters">
+                        <div class="numbers__filters-description">
+                            <div class="flex-row">
+                                <div id="overlay-hide" class="btn-back mobile-show" data-icon="chevron"></div>
+                                <h2 class="title-middle">Фильтры</h2>
+                            </div>
+                            <div>
+                                <button id="numbers-clear" class="btn-outline">
+                                    Очистить <span data-icon="close"></span>
+                                </button>
+                            </div>
+                            <div>
+                                <p class="text">Выбери красивый номер удобно и быстро с помощью фильтров</p>
+                            </div>
+                        </div>
+
+                        <div class="numbers__filters-form">
+
+                            <div class="free-search form-group">
+                                <label for="numbers-free-search" class="form-label">Свободный поиск</label>
+                                <div class="free-search__container">
+                                    <span class="free-search__magnifier-icon" data-icon="magnifier"></span>
+                                    <input type="text" inputmode="numeric" maxlength="10" id="numbers-free-search" class="form-input input-placeholder" placeholder="Введи от 1 до 10 цифр">
+                                    <span class="free-search__question-icon" data-icon="question"></span>
+                                </div>
+                            </div>
+
+                            <div id="numbers-categories" class="categories-search form-group">
+                                <label class="form-label">Категории:</label>
+                                <div class="button-block numbers__button-block">
+                                    {% for category in filters.number_categories %}
+                                        <button class="btn-form">
+                                            <span class="circle" data-id="{{ category.id }}" style="background-color: #{{ category.hex }}"></span>
+                                            {{ category.name }}
+                                        </button>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                            <div id="numbers-operators" class="operators-search form-group">
+                                <label class="form-label">Операторы:</label>
+                                <div class="button-block">
+                                    {% for operator in filters.operators %}
+                                        <button class="btn-form">
+                                            <span class="operator-icon numbers__operator-icon" data-id="{{ operator.id }}" title="{{ operator.name }}"></span>
+                                        </button>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                            <div class="numbers__filters-form-select">
+                                <div class="region-search form-group">
+                                    <label for="numbers-regions" class="form-label">Регион:</label>
+                                    <select id="numbers-regions" name="region" class="form-select">
+                                        <option value="0">Выбрать регион</option>
+                                        {% for region in filters.regions %}
+                                            <option value="{{ region.id }}">{{ region.name }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                                <div class="tariffs-search form-group">
+                                    <label for="tariff-search" class="form-label">Тариф (не активен):</label>
+                                    <select id="tariff-search" name="tariff" class="form-select" disabled>
+                                        <option value="0">Выбрать тариф</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="price-search form-group numbers__price-search">
+                                <label class="form-label">Стоимость тарифа</label>
+                                <div class="flex-row">
+                                    <input type="text" id="numbers-min_price" class="form-input" placeholder="От 0 руб.">
+                                    <input type="text" id="numbers-max_price" class="form-input" placeholder="До ∞ руб.">
+                                </div>
+                            </div>
+
+                            <div class="numbers__container_button">
+                                <button id="numbers-search" class="btn filters-form__bottom">Поиск</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="numbers__container-right">
+
+                    <div class="numbers__content">
+                        <div class="numbers__content-container">
+                            <div class="numbers__content-top">
+                                <div id="overlay-show" class="numbers__filters-btn mobile-show">
+                                    <div class="flex-row">
+                                        <div>
+                                            <div class="circle numbers__circle--blue-size">0</div>
+                                        </div>
+                                        <div class="flex-row">
+                                            <label class="title-middle">Фильтры</label>
+                                            <div data-icon="filter"></div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="btn-sorting btn-sorting__position">
+                                    <div class="btn-sorting__icon" data-icon="sorting"></div>
+                                    <label class="btn-sorting__name">Сортировать</label>
+                                </div>
+                            </div>
+                            <div class="splide numbers__splide mobile-show">
+                                <div class="splide__track">
+                                    <ul class="splide__list">
+                                        <li class="splide__slide btn-form flex-row numbers__btn-form--blue">
+                                            <div class="btn-form">
+                                                <span class="operator-icon numbers__content-operator" data-id="1"></span>
+                                            </div>
+                                            <div class="btn-form">
+                                                <span class="operator-icon numbers__content-operator" data-id="2"></span>
+                                            </div>
+                                            <div data-icon="close-white"></div>
+                                        </li>
+                                        <li class="splide__slide btn-form flex-row numbers__btn-form--blue">
+                                            <div class="circle numbers__carousel-circle">2</div>
+                                            <div>Тариф</div>
+                                            <div data-icon="close-white"></div>
+                                        </li>
+                                        <li class="splide__slide btn-form">Категория</li>
+                                        <li class="splide__slide btn-form">Регион</li>
+                                        <li class="splide__slide btn-form">Стоимость</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="numbers__count mobile-show">Найдено: <span>0</span> номеров</div>
+                            <div class="numbers__content-list"></div>
+                            <div class="loader loader--visibility"></div>
+                        </div>
+                    </div>
+                    <div class="numbers__download-btn">
+                        <button class="hidden">Загрузить еще</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <script>
+        window.categories = {{ filters.number_categories|json_encode|raw }}
+            window.operators = {{ filters.operators|json_encode|raw }}
+                window.regions = {{ filters.regions|json_encode|raw }}
+    </script>
+{% endblock %}

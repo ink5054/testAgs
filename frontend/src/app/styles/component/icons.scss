@@ -1,0 +1,29 @@
+$icons:
+        chevron url(@app/assets/images/icons/different/chevron.svg) 11px 20px,
+        close url(@app/assets/images/icons/different/close.small.svg) 9px 9px,
+        close-white url(@app/assets/images/icons/different/close.small.white.svg) 14px 14px,
+        filter url(@app/assets/images/icons/different/filter.svg) 14px 12px,
+        magnifier url(@app/assets/images/icons/different/magnifier.svg) 20px 20px,
+        question url(@app/assets/images/icons/different/question.svg) 20px 20px,
+        sorting url(@app/assets/images/icons/different/sorting.svg) 10px 14px,
+        avatar url(@app/assets/images/icons/different/avatar.svg) 15px 17px,
+        bg-menu url(@app/assets/images/icons/different/bg-menu.svg) 22px 19px,
+        home url(@app/assets/images/icons/different/home.svg) 30px 26px,
+        chevron-bottom url(@app/assets/images/icons/different/chevron.bottom.svg) 6px 11px,
+        list-order url(@app/assets/images/icons/different/list-order.svg) 20px 26px,
+        star url(@app/assets/images/icons/different/star.svg) 27px 26px,
+        heart url(@app/assets/images/icons/different/heart.svg) 31px 26px,
+        user url(@app/assets/images/icons/different/user.svg) 23px 26px,
+;
+
+
+
+@each $name, $icon, $width, $height in $icons {
+  [data-icon='#{$name}']{
+    background-image: $icon;
+    width: $width;
+    height: $height;
+    background-repeat: no-repeat;
+    background-size: 100%;
+  }
+}

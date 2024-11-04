@@ -1,0 +1,21 @@
+AddDefaultCharset 'utf-8'
+
+php_value session.gc_maxlifetime 86400
+php_value register_globals 1
+
+Options +FollowSymLinks
+RewriteEngine On
+
+# Перенаправление на https
+RewriteCond %{HTTPS} off
+RewriteCond %{HTTP:X-Forwarded-Proto} !https
+RewriteCond %{HTTP_HOST} !^localhost
+RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+# Перенаправление на index.php
+RewriteBase /
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(.*)$ index.php/$1 [L]
+RewriteCond %{HTTP_USER_AGENT} ^$ [NC]
+RewriteRule .* - [F]

@@ -1,0 +1,7 @@
+<% for (const scriptUrl of htmlWebpackPlugin.files.js) { %>
+	<script defer="defer" src="<%= scriptUrl %>?v=<%= htmlWebpackPlugin.options.hash %>"></script>
+<% } %>
+
+<% for (const styleUrl of htmlWebpackPlugin.files.css) { %>
+	<link href="<%= styleUrl %>?v=<%= htmlWebpackPlugin.options.hash %>" rel="stylesheet" type="text/css">
+<% } %>

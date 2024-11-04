@@ -1,0 +1,15 @@
+.button-block{
+    display: flex;
+    justify-content: start;
+    flex-wrap: wrap;
+    column-gap: 0.6rem;
+    row-gap: 1rem;
+
+    > button{
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap:0.4rem;
+      font-size: 1.2rem;
+    }
+}

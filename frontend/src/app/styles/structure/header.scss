@@ -1,0 +1,31 @@
+@import "@app/styles/component/logo";
+.header{
+  width: 100%;
+  background: var(--app-black);
+  color: var(--app-white);
+  font-size: clamp(16px, 2vw, 18px);
+  margin-bottom: 2.9rem;
+
+  &__inner{
+    height: 80px;
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+  }
+  &__logo{
+    flex: auto;
+    line-height: 2px;
+  }
+  &__item > div{
+    display: flex;
+    align-items: center;
+    gap:1rem;
+    letter-spacing: -0.4000000059604645px;
+    font-size: clamp(16px, 2vw, 18px);
+    font-weight: 600;
+
+    > div:nth-of-type(2){
+      line-height: 17px;
+    }
+  }
+}

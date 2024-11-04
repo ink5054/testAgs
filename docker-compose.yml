@@ -1,0 +1,86 @@
+services:
+  app:
+    container_name: ag-test-task-app
+    ports:
+      - "8080:80"
+    volumes:
+      - ./:/var/www/sites/ag-test-task.ru
+      - ./_docker/conf/apache2/sites:/etc/apache2/sites-available
+      - ./_docker/conf/apache2/apache2.conf:/etc/apache2/apache2.conf
+      - ./_docker/conf/php/php.ini:/usr/local/etc/php/conf.d/php.ini
+      - ./_docker/conf/php/xdebug.ini:/usr/local/etc/php/conf.d/xdebug.ini
+    build:
+      context: .
+      dockerfile: _docker/Dockerfile
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 4G
+        reservations:
+          cpus: '0.1'
+          memory: 1G
+    depends_on:
+      - db
+      - phpmyadmin
+    networks:
+      custom_net:
+          ipv4_address: 192.168.1.77
+
+  db:
+    image: mariadb:latest
+    container_name: ${DB_HOST}
+    command: --sql-mode=""
+    restart: always
+    ports:
+      - "3300:3306"
+    volumes:
+      - ./_docker/mysql:/var/lib/mysql
+      - ./_docker/conf/mysql/my.cnf:/etc/mysql/my.cnf
+    environment:
+      MYSQL_DATABASE: ${DB_NAME}
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 2G
+        reservations:
+          cpus: '0.1'
+          memory: 1G
+    networks:
+      - local-net
+
+  phpmyadmin:
+    image: phpmyadmin:latest
+    container_name: ag-test-task-phpmyadmin
+    restart: always
+    ports:
+      - "8081:80"
+    environment:
+      PMA_HOST: ${DB_HOST}
+      PMA_USER: ${DB_USER}
+      PMA_PASSWORD: ${DB_PASSWORD}
+      MAX_EXECUTION_TIME: 3000
+      MEMORY_LIMIT: 512M
+      UPLOAD_LIMIT: 512M
+    deploy:
+      resources:
+        limits:
+          cpus: '0.2'
+          memory: 1G
+        reservations:
+          cpus: '0'
+          memory: 128M
+    depends_on:
+      - db
+    networks:
+      - local-net
+
+networks:
+  custom_net:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 192.168.1.0/24
+          gateway: 192.168.1.1

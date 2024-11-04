@@ -1,0 +1,14 @@
+$operators:
+        1 url(@app/assets/images/icons/operators/beeline.svg),
+        2 url(@app/assets/images/icons/operators/megaphone.svg),
+        3 url(@app/assets/images/icons/operators/mts.svg),
+        4 url(@app/assets/images/icons/operators/yota.svg),
+        5 url(@app/assets/images/icons/operators/t2.svg),
+        6 url(@app/assets/images/icons/operators/rostelecom.svg);
+
+
+@each $id, $logo in $operators {
+  .operator-icon[data-id='#{$id}']{
+    background-image: $logo;
+  }
+}

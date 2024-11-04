@@ -1,0 +1,8 @@
+.logo{
+  &__link{
+    color: var(--app-white-color);
+    font-size: clamp(16px, 5vw, 36px);
+    font-weight: 800;
+    line-height: 22px;
+  }
+}
