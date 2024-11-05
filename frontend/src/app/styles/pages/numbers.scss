@@ -191,41 +191,6 @@
 }
 
 @media (max-width: 480px) {
-  .number-item__city {
-    max-width: 130px;
-    overflow: hidden;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-  }
-  .label{
-    font-size: 0.9rem;
-  }
-  .title-page.container{
-    padding: 0;
-  }
-  .title-page{
-    .title-page__container{
-      padding: 10px 20px;
-      display: block;
-      text-align: center;
-
-      [data-icon=chevron]{
-        position: absolute;
-      }
-    }
-  }
-  .numbers__container-left {
-    width: 100%;
-  }
-  .numbers.container{
-    padding: 0;
-    position: absolute;
-    width: 100%;
-    height: auto;
-    top: 40px;
-    background-color: var(--app-white);
-    border-radius: 22px 22px 0 0;
-  }
   .numbers{
     &__container {
       margin-bottom: 50px;
@@ -296,6 +261,28 @@
     }
     &__overlay--visibility{
       display: none;
+    }
+
+    &-item__city {
+      max-width: 130px;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
+    &__container-left {
+      width: 100%;
+    }
+    &.container{
+      padding: 0;
+      position: absolute;
+      width: 100%;
+      height: auto;
+      top: 40px;
+      background-color: var(--app-white);
+      border-radius: 22px 22px 0 0;
+    }
+    &__overlay{
+      @include overlay;
     }
   }
 }

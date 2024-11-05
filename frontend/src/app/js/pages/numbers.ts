@@ -15,9 +15,8 @@ class PhoneNumbers {
     $numbersForm = $('.numbers__filters-form');
     $numbersCount = $('.numbers__count span');
     $filtersCount = $('.numbers__filters-btn .circle');
-    $numbersContainerLeft = $('.numbers__container-left');
+    $overlay = $('.numbers__overlay');
 
-    $overlay: JQuery<HTMLElement> = null;
     numberCounter: number = 0;
     page: number = 1;
 
@@ -47,18 +46,13 @@ class PhoneNumbers {
             this.filter = {};
             this.countFilters();
         });
-
-        if(Device.isMobile()){
-            this.$numbersContainerLeft.addClass('overlay');
-            this.$overlay = $('.overlay');
-
             $(document).on('touchend click', '#overlay-show',  () =>{
                 this.$overlay.fadeIn(1000);
             });
             $(document).on('touchend click', '#overlay-hide',  () =>{
                 this.$overlay.fadeOut(1000);
             });
-        }
+
         new Splide('.splide', {
             perPage: 2,
             rewind : true,

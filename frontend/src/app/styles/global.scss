@@ -135,4 +135,21 @@ input[type="number"] {
   .mobile-show{
     display: block;
   }
+  .label{
+    font-size: 0.9rem;
+  }
+  .title-page.container{
+    padding: 0;
+  }
+  .title-page{
+    .title-page__container{
+      padding: 10px 20px;
+      display: block;
+      text-align: center;
+
+      [data-icon=chevron]{
+        position: absolute;
+      }
+    }
+  }
 }
