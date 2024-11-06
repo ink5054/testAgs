@@ -45,24 +45,24 @@ readonly class FindAllNumbersAction
     private function applyFilters(Connection $conn, QueryBuilder $qb, array $filters): void
     {
         if (isset($filters['free_search'])) {
-            $qb->where($qb->expr()->like('number',
+            $qb->andWhere($qb->expr()->like('number',
                 $qb->createPositionalParameter('%' . $filters['free_search'] . '%')));
         }
 
         if (!empty($filters['categories'])) {
-            $qb->where($qb->expr()->in('category_id', DatabaseUtils::quoteValues($conn, $filters['categories'])));
+            $qb->andWhere($qb->expr()->in('category_id', DatabaseUtils::quoteValues($conn, $filters['categories'])));
         }
 
         if (!empty($filters['operators'])) {
-            $qb->where($qb->expr()->in('operator_id', DatabaseUtils::quoteValues($conn, $filters['operators'])));
+            $qb->andWhere($qb->expr()->in('operator_id', DatabaseUtils::quoteValues($conn, $filters['operators'])));
         }
 
         if (isset($filters['region']) && $filters['region'] != 0) {
-            $qb->where($qb->expr()->eq('region_id', $qb->createPositionalParameter($filters['region'])));
+            $qb->andWhere($qb->expr()->eq('region_id', $qb->createPositionalParameter($filters['region'])));
         }
 
         if (isset($filters['min_price'])) {
-            $qb->where($qb->expr()->gte('tariff_cost', $qb->createPositionalParameter($filters['min_price'])));
+            $qb->andWhere($qb->expr()->gte('tariff_cost', $qb->createPositionalParameter($filters['min_price'])));
         }
 
         if (isset($filters['max_price'])) {
