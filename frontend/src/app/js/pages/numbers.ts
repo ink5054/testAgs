@@ -7,9 +7,9 @@ import { Splide } from '@splidejs/splide';
 import '@splidejs/splide/css';
 
 // fixme нужно в отдельном файле
+
 interface NumbersFilter {
-    // fixme any крайне не рекомендуется использовать, так как теряется смысл использования typescript
-    [key: string]: any
+    [key: string]: number[] | string | number;
 }
 
 type filtersTypes =
@@ -17,8 +17,22 @@ type filtersTypes =
     | 'int'
     | 'string'
 
+
+interface NumberData {
+    id: number;
+    number: string;
+    operator_id: number;
+    category_id: number;
+    region_id: number;
+    tariff_cost: number;
+}
+
+interface ResponseData {
+    list: NumberData[];
+}
+
 // fixme нужно использовать форматтер ide (ctrl + alt + L)
-/*export */class PhoneNumbers {
+export class PhoneNumbers {
     // fixme Нет модификаторов доступа
     //private $numbersList: JQuery = $('.numbers__content-list');
     $numbersList = $('.numbers__content-list');
@@ -45,12 +59,12 @@ type filtersTypes =
             this.page += this.page;
 
             // fixme this.render().then
-            await this.render();
+            await this.renderNumbers();
         })
         $(document).on('click', '#numbers-search',  async() =>{
             this.numberCounter = 0;
             this.$numbersList.empty();
-            await this.render();
+            await this.renderNumbers();
         });
 
         // fixme делегирование событий
@@ -88,7 +102,7 @@ type filtersTypes =
             pagination: false,
         }).mount();
     }
-
+//getFieldValue
     private setFilter(name: string, item: JQuery<HTMLElement>, type: filtersTypes|null = null) {
 
 
@@ -96,20 +110,21 @@ type filtersTypes =
         if (type === 'list') {
             item.toggleClass('numbers__active--violet');
 
-            let value = item.find('span').data('id');
+            let value: number = item.find('span').data('id');
 
-            if (!this.filter[name])
-                this.filter[name] = [];
+            if (!this.filter[name]) this.filter[name] = [];
 
             // fixme скобки ставим везде, даже если условие в 1 строку
-            if (item.hasClass('numbers__active--violet'))
-                this.filter[name].push(value);
-            else
-                this.filter[name] = this.filter[name].filter((v: number) => v !== value);
 
-            if (!this.filter[name].length)
+            if (item.hasClass('numbers__active--violet')){
+               (this.filter[name] as number[]).push(value);
+            }else{
+                this.filter[name] = (this.filter[name] as number[]).filter((v: number) => v !== value);
+            }
+
+            if (!(this.filter[name] as number[]).length){
                 delete this.filter[name];
-
+            }
             this.countFilters();
             return;
         } else if (type === 'int') {
@@ -137,37 +152,28 @@ type filtersTypes =
         this.$filtersCount.text(Object.keys(this.filter).length);
     }
 
-    // fixme нужно корректное название методу, например: getNumbers
-    load() {
-        // fixme jquery возвращает promise, если прописать async: false
-        // return $.ajax({
-        //     method: "POST",
-        //     url: "/numbers/page/" + this.page,
-        //     dataType: "json",
-        //     contentType: "application/json; charset=utf-8",
-        //     data: JSON.stringify(this.filter),
-        //     async: false
-        // })
 
-        return new Promise((success, error) => $.ajax({
+    getNumbers() {
+        // fixme jquery возвращает promise, если прописать async: false
+        return $.ajax({
             method: "POST",
             url: "/numbers/page/" + this.page,
             dataType: "json",
             contentType: "application/json; charset=utf-8",
             data: JSON.stringify(this.filter),
-            success,
-            error
-        }))
+            async: false
+        })
     }
 
-    // fixme корректное название метода
-    async render(){
+
+    async renderNumbers(){
         this.$numbersDownload.addClass('hidden');
         View.showPreloader();
         try {
             // fixme метод load должен возвращать корректный результат с типом в ответе, а не any
-            let data: any = await this.load();
-            const count = data.list.length;
+            const data: ResponseData = await this.getNumbers();
+            console.log(data);
+            const count: number = data.list.length;
             this.btnDownloadState(count);
             this.numberCounter += count;
             this.$numbersCount.text(this.numberCounter);
@@ -195,17 +201,11 @@ type filtersTypes =
             });
 
             View.hidePreloader();
-            // fixme название класса hidden
-            this.$numbersDownload.removeClass('hide');
+
+            this.$numbersDownload.removeClass('hidden');
             if(Device.isMobile()) this.$overlay.fadeOut();
         } catch (e) {
             alert(JSON.stringify(e));
         }
     }
 }
-
-// fixme в main.ts
-$(document).ready(async () => {
-    const phoneNumbers: PhoneNumbers = new PhoneNumbers();
-    await phoneNumbers.render();
-});
