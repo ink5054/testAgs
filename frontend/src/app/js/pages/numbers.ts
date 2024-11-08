@@ -42,12 +42,14 @@ declare global {
 // fixme нужно использовать форматтер ide (ctrl + alt + L)
 export class PhoneNumbers {
     private $numbersList: JQuery<HTMLElement> = $('.numbers__content-list');
+    private $numbersFilters: JQuery<HTMLElement> = $('.numbers__filters');
 
     private $numbersLoadMore: JQuery<HTMLElement> = $('.numbers__load-more > button');
     private $numbersForm: JQuery<HTMLElement> = $('.numbers__filters-form');
     private $numbersCount: JQuery<HTMLElement> = $('.numbers__count span');
     private $filtersCount: JQuery<HTMLElement> = $('.numbers__filters-btn .circle');
     private $overlay: JQuery<HTMLElement> = $('.numbers__overlay');
+    private numbersLoadMoreBtn: JQuery<HTMLElement> = $('.numbers__load-more');
 
     private $inputsForm = this.$numbersForm.find('input');
     private $selectForm = this.$numbersForm.find('select');
@@ -60,10 +62,6 @@ export class PhoneNumbers {
     private filter: NumbersFilter = {};
     private arrayBtnValues: NumbersFilter = {};
 
-    /*
-        fixme "спагетти" код в конструкторе, его необходимо разделить на логические части
-         (например initListeners - инициализирует все слушатели)
-     */
     constructor() {
         this.initListeners();
         // fixme 1: слушатели на документ нужно использовать в исключительных случаях, слушатель нужен на родительский контейнер
@@ -89,28 +87,28 @@ export class PhoneNumbers {
     }
 
     private initListeners() {
-        $(document).on('click', '.numbers__load-more > button', () => {
+        this.numbersLoadMoreBtn.on('click', 'button', ():void => {
             this.page += this.page;
 
             // fixme this.render().then
             this.renderNumbers().then();
         })
-        $(document).on('click', '#numbers-search', async () => {
+        this.$numbersFilters.on('click', '#numbers-search',  ():void => {
             this.numberCounter = 0;
             this.$numbersList.empty();
-            await this.renderNumbers();
+            this.renderNumbers().then();
         });
 
         // fixme делегирование событий
-        $(document).on('change', '#numbers-free-search', (e: JQuery.ChangeEvent) => this.getFieldValue("free_search", $(e.currentTarget), "string"));
-        $(document).on('click', '#numbers-categories button', (e: JQuery.ClickEvent) => this.getBtnValue('categories', $(e.currentTarget), 'list'));
-        $(document).on('click', '#numbers-operators button', (e: JQuery.ClickEvent) => this.getBtnValue('operators', $(e.currentTarget), 'list'));
-        $(document).on('change', '#numbers-regions', (e: JQuery.ChangeEvent) => this.getFieldValue("region", $(e.currentTarget), "int"));
-        $(document).on('change', '#numbers-min_price', (e: JQuery.ChangeEvent) => this.getFieldValue("min_price", $(e.currentTarget), "int"));
-        $(document).on('change', '#numbers-max_price', (e: JQuery.ChangeEvent) => this.getFieldValue("max_price", $(e.currentTarget), "int"));
+        this.$numbersFilters.on('change', '#numbers-free-search', (e: JQuery.ChangeEvent):void => this.getFieldValue("free_search", $(e.currentTarget), "string"));
+        this.$numbersFilters.on('click', '#numbers-categories button', (e: JQuery.ClickEvent):void => this.getBtnValue('categories', $(e.currentTarget), 'list'));
+        this.$numbersFilters.on('click', '#numbers-operators button', (e: JQuery.ClickEvent):void => this.getBtnValue('operators', $(e.currentTarget), 'list'));
+        this.$numbersFilters.on('change', '#numbers-regions', (e: JQuery.ChangeEvent):void => this.getFieldValue("region", $(e.currentTarget), "int"));
+        this.$numbersFilters.on('change', '#numbers-min_price', (e: JQuery.ChangeEvent):void => this.getFieldValue("min_price", $(e.currentTarget), "int"));
+        this.$numbersFilters.on('change', '#numbers-max_price', (e: JQuery.ChangeEvent):void => this.getFieldValue("max_price", $(e.currentTarget), "int"));
 
 
-        $(document).on('click', '#numbers-clear', () => {
+        this.$numbersFilters.on('click', '#numbers-clear', ():void => {
             this.$inputsForm.val('');
             this.$selectForm.val('0');
             this.$buttonForm.removeClass('numbers__btn--active');
@@ -199,7 +197,7 @@ export class PhoneNumbers {
             this.numberCounter += count;
             this.$numbersCount.text(this.numberCounter);
 
-            $.each(data.list, (_, {number, operator_id, region_id, tariff_cost}) => {
+            $.each(data.list, (_: number, {number, operator_id, region_id, tariff_cost}: NumberData) => {
                 console.log(window.regions)
                 // fixme работа с получением данных из window должна быть в классе storage, например RegionStorage
                 let region = window.regions.find((i: { id: number, name: string }) => i.id === region_id);
