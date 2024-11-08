@@ -1,9 +1,6 @@
-// fixme не нужно
-"use strict";
-
-import { Device } from "@app/js/compat/Device";
-import { View } from "@app/js/compat/View";
-import { Splide } from '@splidejs/splide';
+import {Device} from "@app/js/compat/Device";
+import {View} from "@app/js/compat/View";
+import {Splide} from '@splidejs/splide';
 import '@splidejs/splide/css';
 
 // fixme нужно в отдельном файле
@@ -31,130 +28,155 @@ interface ResponseData {
     list: NumberData[];
 }
 
+interface Region {
+    id: number;
+    name: string;
+}
+
+declare global {
+    interface Window {
+        regions: Region[];
+    }
+}
+
 // fixme нужно использовать форматтер ide (ctrl + alt + L)
 export class PhoneNumbers {
-    // fixme Нет модификаторов доступа
-    //private $numbersList: JQuery = $('.numbers__content-list');
-    $numbersList = $('.numbers__content-list');
-    // fixme слово download используется не в правильном контексте (download - загрузка, скачка, обычно подразумевается загрузка файлов)
-    $numbersDownload = $('.numbers__download-btn > button');
-    $numbersForm = $('.numbers__filters-form');
-    $numbersCount = $('.numbers__count span');
-    $filtersCount = $('.numbers__filters-btn .circle');
-    $overlay = $('.numbers__overlay');
+    private $numbersList: JQuery<HTMLElement> = $('.numbers__content-list');
 
-    numberCounter: number = 0;
-    page: number = 1;
+    private $numbersLoadMore: JQuery<HTMLElement> = $('.numbers__load-more > button');
+    private $numbersForm: JQuery<HTMLElement> = $('.numbers__filters-form');
+    private $numbersCount: JQuery<HTMLElement> = $('.numbers__count span');
+    private $filtersCount: JQuery<HTMLElement> = $('.numbers__filters-btn .circle');
+    private $overlay: JQuery<HTMLElement> = $('.numbers__overlay');
+
+    private $inputsForm = this.$numbersForm.find('input');
+    private $selectForm = this.$numbersForm.find('select');
+    private $buttonForm = this.$numbersForm.find('button');
+
+
+    private numberCounter: number = 0;
+    private page: number = 1;
 
     private filter: NumbersFilter = {};
+    private arrayBtnValues: NumbersFilter = {};
 
     /*
         fixme "спагетти" код в конструкторе, его необходимо разделить на логические части
          (например initListeners - инициализирует все слушатели)
      */
-    constructor(){
+    constructor() {
+        this.initListeners();
         // fixme 1: слушатели на документ нужно использовать в исключительных случаях, слушатель нужен на родительский контейнер
         // fixme 2: избегаем излишнего использования асинхронных функций
-        $(document).on('click', '.numbers__download-btn > button', async() => {
+
+        // fixme overlay должен быть в отдельном классе
+        $(document).on('touchend click', '#overlay-show', () => {
+            this.$overlay.fadeIn(1000);
+        });
+        $(document).on('touchend click', '#overlay-hide', () => {
+            this.$overlay.fadeOut(1000);
+        });
+
+        // fixme чтобы избегать "спагетти" кода, правильнее было бы вынести в отдельный метод
+        new Splide('.splide', {
+            perPage: 2,
+            rewind: true,
+            autoWidth: true,
+            isNavigation: false,
+            arrows: false,
+            pagination: false,
+        }).mount();
+    }
+
+    private initListeners() {
+        $(document).on('click', '.numbers__load-more > button', () => {
             this.page += this.page;
 
             // fixme this.render().then
-            await this.renderNumbers();
+            this.renderNumbers().then();
         })
-        $(document).on('click', '#numbers-search',  async() =>{
+        $(document).on('click', '#numbers-search', async () => {
             this.numberCounter = 0;
             this.$numbersList.empty();
             await this.renderNumbers();
         });
 
         // fixme делегирование событий
-        $(document).on('change', '#numbers-free-search',  e => this.setFilter("free_search", $(e.currentTarget), "string"));
-        $(document).on('click', '#numbers-categories button',  (e) => this.setFilter('categories', $(e.currentTarget), 'list'));
-        $(document).on('click', '#numbers-operators button',  (e) => this.setFilter('operators', $(e.currentTarget), 'list'));
-        $(document).on('change', '#numbers-regions',  e => this.setFilter("region", $(e.currentTarget),  "int"));
-        $(document).on('change', '#numbers-min_price',  e => this.setFilter("min_price", $(e.currentTarget), "int"));
-        $(document).on('change', '#numbers-max_price',  e => this.setFilter("max_price", $(e.currentTarget), "int"));
+        $(document).on('change', '#numbers-free-search', (e: JQuery.ChangeEvent) => this.getFieldValue("free_search", $(e.currentTarget), "string"));
+        $(document).on('click', '#numbers-categories button', (e: JQuery.ClickEvent) => this.getBtnValue('categories', $(e.currentTarget), 'list'));
+        $(document).on('click', '#numbers-operators button', (e: JQuery.ClickEvent) => this.getBtnValue('operators', $(e.currentTarget), 'list'));
+        $(document).on('change', '#numbers-regions', (e: JQuery.ChangeEvent) => this.getFieldValue("region", $(e.currentTarget), "int"));
+        $(document).on('change', '#numbers-min_price', (e: JQuery.ChangeEvent) => this.getFieldValue("min_price", $(e.currentTarget), "int"));
+        $(document).on('change', '#numbers-max_price', (e: JQuery.ChangeEvent) => this.getFieldValue("max_price", $(e.currentTarget), "int"));
 
-        $(document).on('click', '#numbers-clear',  () =>{
-            // fixme искать каждый раз инпуты неправильно, нужно было вынести в глобальную переменную за пределами эвента
-            this.$numbersForm.find('input').val('');
-            this.$numbersForm.find('select').val('0');
-            // fixme модификатор цвета использовать правильно, но тут нужен модификатор active
-            this.$numbersForm.find('button').removeClass('numbers__active--violet');
+
+        $(document).on('click', '#numbers-clear', () => {
+            this.$inputsForm.val('');
+            this.$selectForm.val('0');
+            this.$buttonForm.removeClass('numbers__btn--active');
             this.filter = {};
-            this.countFilters();
+            this.updateFilterCount();
         });
-            // fixme overlay должен быть в отдельном классе
-            $(document).on('touchend click', '#overlay-show',  () =>{
-                this.$overlay.fadeIn(1000);
-            });
-            $(document).on('touchend click', '#overlay-hide',  () =>{
-                this.$overlay.fadeOut(1000);
-            });
-
-            // fixme чтобы избегать "спагетти" кода, правильнее было бы вынести в отдельный метод
-        new Splide('.splide', {
-            perPage: 2,
-            rewind : true,
-            autoWidth: true,
-            isNavigation: false,
-            arrows : false,
-            pagination: false,
-        }).mount();
     }
-//getFieldValue
-    private setFilter(name: string, item: JQuery<HTMLElement>, type: filtersTypes|null = null) {
 
+    private setFilter(name: string, value: number | string, type: filtersTypes, state?: boolean): void {
 
-        let value;
         if (type === 'list') {
-            item.toggleClass('numbers__active--violet');
-
-            let value: number = item.find('span').data('id');
-
-            if (!this.filter[name]) this.filter[name] = [];
-
-            // fixme скобки ставим везде, даже если условие в 1 строку
-
-            if (item.hasClass('numbers__active--violet')){
-               (this.filter[name] as number[]).push(value);
-            }else{
-                this.filter[name] = (this.filter[name] as number[]).filter((v: number) => v !== value);
+            if (!this.filter[name]) {
+                this.filter[name] = [];
             }
-
-            if (!(this.filter[name] as number[]).length){
+            if (state) {
+                (this.filter[name] as number[]).push(value as number);
+            } else {
+                this.filter[name] = (this.filter[name] as number[]).filter((v: number): boolean => v !== value);
+            }
+            if (!(this.filter[name] as number[]).length) {
                 delete this.filter[name];
             }
-            this.countFilters();
-            return;
-        } else if (type === 'int') {
+        } else {
+            this.filter[name] = value;
+            if (!this.filter[name]) {
+                delete this.filter[name];
+            }
+        }
+        this.updateFilterCount();
+    }
+
+    private getFieldValue(name: string, item: JQuery<HTMLElement>, type: filtersTypes): void {
+        let value: string | number;
+
+        if (type === 'int') {
             // fixme подобные преобразования должны быть в отдельных классах (Utils), пример: StringUtils.replaceNonNumbers
             value = String(item.val()).replace(/\D/g, '');
             value = value === '0' ? "" : Number(value);
-        } else
+        } else {
             value = String(item.val());
+        }
 
-        this.filter[name] = value;
 
-        if (!value)
-            delete this.filter[name];
+        this.setFilter(name, value, type);
 
-        this.countFilters();
     }
-    private btnDownloadState(count: number):void{
-        // fixme Вместо добавления или удаления класса вручную, можно использовать toggleClass, чтобы управлять видимостью элемента в зависимости от условия
-        // fixme тернарные операторы используются когда необходимо вернуть значение, а не просто ради условия в 1 строку
-        // this.$numbersDownload.toggleClass('hidden', count < 10);
-        count < 10 ? this.$numbersDownload.addClass('hidden') : this.$numbersDownload.removeClass('hidden');
+
+    private getBtnValue(name: string, item: JQuery<HTMLElement>, type: filtersTypes): void {
+        item.toggleClass('numbers__btn--active');
+
+        let value: number = item.find('span').data('id');
+        let state: boolean = item.hasClass('numbers__btn--active');
+
+        this.setFilter(name, value, type, state);
     }
-    // fixme нужны корректные и понятные названия методов (например: updateActiveFiltersAmount)
-    private countFilters():void{
+
+    private btnNumbersLoadState(count: number): void {
+        this.$numbersLoadMore.toggleClass('hidden', count < 10);
+    }
+
+    private updateFilterCount(): void {
         this.$filtersCount.text(Object.keys(this.filter).length);
     }
 
 
     getNumbers() {
-        // fixme jquery возвращает promise, если прописать async: false
         return $.ajax({
             method: "POST",
             url: "/numbers/page/" + this.page,
@@ -166,23 +188,22 @@ export class PhoneNumbers {
     }
 
 
-    async renderNumbers(){
-        this.$numbersDownload.addClass('hidden');
+    async renderNumbers() {
+        this.$numbersLoadMore.addClass('hidden');
         View.showPreloader();
         try {
-            // fixme метод load должен возвращать корректный результат с типом в ответе, а не any
             const data: ResponseData = await this.getNumbers();
             console.log(data);
             const count: number = data.list.length;
-            this.btnDownloadState(count);
+            this.btnNumbersLoadState(count);
             this.numberCounter += count;
             this.$numbersCount.text(this.numberCounter);
 
             $.each(data.list, (_, {number, operator_id, region_id, tariff_cost}) => {
-
+                console.log(window.regions)
                 // fixme работа с получением данных из window должна быть в классе storage, например RegionStorage
-                let region = (window as any).regions.find((i: { id:number, name: string })  => i.id === region_id);
-                // fixme выровнять html верстку
+                let region = window.regions.find((i: { id: number, name: string }) => i.id === region_id);
+
                 this.$numbersList.append(`
                              <div class="number-item">
                                 <div class="number-item__data flex-row">
@@ -202,8 +223,8 @@ export class PhoneNumbers {
 
             View.hidePreloader();
 
-            this.$numbersDownload.removeClass('hidden');
-            if(Device.isMobile()) this.$overlay.fadeOut();
+            this.$numbersLoadMore.removeClass('hidden');
+            if (Device.isMobile()) this.$overlay.fadeOut();
         } catch (e) {
             alert(JSON.stringify(e));
         }
