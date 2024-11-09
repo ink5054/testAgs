@@ -26,14 +26,3 @@
   background-color: var(--app-light-gray);
   border:0;
 }
-
-@mixin overlay{
-  width: 100%;
-  height: 100vh;
-  background-color: var(--app-white);
-  position: fixed;
-  right: 0;
-  top: 0;
-  z-index: 1000;
-  display: none;
-}

@@ -16,6 +16,9 @@ const BUILD_TWIG_DIR = path.resolve('..', 'backend', 'templates')
 
 const LAYER_APP_PATH = path.resolve(SRC_DIR, 'app')
 const LAYER_PAGES_PATH = path.resolve(SRC_DIR, 'pages')
+const LAYER_WIDGETS_PATH = path.resolve(SRC_DIR, 'widgets')
+const LAYER_FEATURES_PATH = path.resolve(SRC_DIR, 'features')
+const LAYER_ENTITIES_PATH = path.resolve(SRC_DIR, 'entities')
 const LAYER_SHARED_PATH = path.resolve(SRC_DIR, 'shared')
 
 const SRC_HTML_DIR = path.resolve(LAYER_APP_PATH, 'html')
@@ -39,6 +42,9 @@ module.exports = {
         alias: {
             '@app': LAYER_APP_PATH,
             '@pages': LAYER_PAGES_PATH,
+            '@widgets': LAYER_WIDGETS_PATH,
+            '@features': LAYER_FEATURES_PATH,
+            '@entities': LAYER_ENTITIES_PATH,
             '@shared': LAYER_SHARED_PATH,
         },
     },

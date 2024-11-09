@@ -13,6 +13,9 @@
       // Пути соответствуют resolve.alias в webpack.config.js
       "@app/*": ["app/*"],
       "@pages/*": ["pages/*"],
+      "@widgets/*": ["widgets/*"],
+      "@features/*": ["features/*"],
+      "@entilies/*": ["entilies/*"],
       "@shared/*": ["shared/*"]
     }
   }

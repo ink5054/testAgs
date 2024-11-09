@@ -1,6 +1,7 @@
 @import "@app/styles/component/free-search";
 @import "@app/styles/component/operators";
-@import "@app/styles/component/preloader";
+@import "@widgets/preloader/ui/preloader";
+@import "@widgets/overlay/ui/overlay";
 @import "@app/styles/component/icons";
 @import "@app/styles/component/btn";
 @import "@app/styles/component/number-item";
@@ -279,9 +280,6 @@
       top: 40px;
       background-color: var(--app-white);
       border-radius: 22px 22px 0 0;
-    }
-    &__overlay{
-      @include overlay;
     }
   }
 }

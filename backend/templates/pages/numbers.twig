@@ -23,12 +23,12 @@
         <div class="numbers container">
             <div class="numbers__container">
 
-                <div class="numbers__container-left numbers__overlay">
+                <div class="numbers__container-left overlay numbers__overlay">
 
                     <div class="numbers__filters">
                         <div class="numbers__filters-description">
                             <div class="flex-row">
-                                <div id="overlay-hide" class="btn-back mobile-show" data-icon="chevron"></div>
+                                <div class="btn-back mobile-show numbers-overlay--hide" data-icon="chevron"></div>
                                 <h2 class="title-middle">Фильтры</h2>
                             </div>
                             <div>
@@ -110,7 +110,7 @@
                     <div class="numbers__content">
                         <div class="numbers__content-container">
                             <div class="numbers__content-top">
-                                <div id="overlay-show" class="numbers__filters-btn mobile-show">
+                                <div class="numbers__filters-btn mobile-show numbers-overlay--show">
                                     <div class="flex-row">
                                         <div>
                                             <div class="circle numbers__circle--blue-size">0</div>
@@ -152,11 +152,11 @@
                             </div>
                             <div class="numbers__count mobile-show">Найдено: <span>0</span> номеров</div>
                             <div class="numbers__content-list"></div>
-                            <div class="loader loader--visibility"></div>
+                            <div class="preloader preloader--visibility"></div>
                         </div>
                     </div>
-                    <div class="numbers__load-more">
-                        <button class="hidden">Загрузить еще</button>
+                    <div class="numbers__load-more hidden">
+                        <button>Загрузить еще</button>
                     </div>
                 </div>
             </div>

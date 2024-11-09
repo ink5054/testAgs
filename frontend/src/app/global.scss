@@ -123,7 +123,7 @@ input[type="number"] {
   gap:0.5rem;
 }
 .hidden{
-  display: none;
+  visibility: hidden;
 }
 @media (max-width: 480px) {
   body{

@@ -1,4 +1,4 @@
-.loader {
+.preloader {
   width: 16px;
   height: 16px;
   border-radius: 50%;
@@ -9,10 +9,12 @@
   box-shadow: -24px 0 #FFF, 24px 0 #FFF;
   box-sizing: border-box;
   animation: shadowPulse 2s linear infinite;
+
+  &--visibility{
+    display: none;
+  }
 }
-.loader--visibility{
-  display: none;
-}
+
 @keyframes shadowPulse {
   33% {
     background: #FFF;
