@@ -12,16 +12,19 @@ const PUBLIC_PATH = '/dist/'
 const SRC_DIR = path.resolve('src')
 const BUILD_DIR = path.resolve('..', 'www', 'dist')
 const BUILD_TWIG_DIR = path.resolve('..', 'backend', 'templates')
-const LAYER_APP_PATH = path.resolve(SRC_DIR, 'app')
 const SRC_HTML_DIR = path.resolve(SRC_DIR, 'html')
+
+const LAYER_APP_PATH = path.resolve(SRC_DIR, 'app')
+const LAYER_PAGES_PATH = path.resolve(SRC_DIR, 'pages')
+const LAYER_SHARED_PATH = path.resolve(SRC_DIR, 'shared')
 
 module.exports = {
     mode: 'production',
     target: 'web',
     entry: {
         app: [
-            path.resolve(__dirname, 'src/app/js/main.ts'),
-            path.resolve(__dirname, 'src/app/styles/main.scss')
+            path.resolve(__dirname, 'src/app/index.ts'),
+            path.resolve(__dirname, 'src/app/index.scss')
         ],
     },
     output: {
@@ -33,6 +36,8 @@ module.exports = {
         extensions: ['.ts', '.js'],
         alias: {
             '@app': LAYER_APP_PATH,
+            '@pages': LAYER_PAGES_PATH,
+            '@shared': LAYER_SHARED_PATH,
         },
     },
     plugins: [

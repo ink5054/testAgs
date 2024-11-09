@@ -11,7 +11,9 @@
     "baseUrl": "./src/",
     "paths": {
       // Пути соответствуют resolve.alias в webpack.config.js
-      "@app/*": ["app/*"]
+      "@app/*": ["app/*"],
+      "@pages/*": ["pages/*"],
+      "@shared/*": ["shared/*"]
     }
   }
 }

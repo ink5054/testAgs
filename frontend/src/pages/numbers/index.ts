@@ -1,49 +1,15 @@
-import {Device} from "@app/js/compat/Device";
-import {View} from "@app/js/compat/View";
-import {Splide} from '@splidejs/splide';
+import { Device } from "@app/Device";
+import { View } from "@app/js/compat/View";
+import { Splide } from '@splidejs/splide';
 import '@splidejs/splide/css';
-
+import { StringUtils } from '@shared/util/StringUtils';
+import { NumbersFilter, filtersTypes, ResponseData, NumberData, Region } from '@pages/numbers/interface';
+import { regionStorage } from "@app/storage";
 // fixme нужно в отдельном файле
-
-interface NumbersFilter {
-    [key: string]: number[] | string | number;
-}
-
-type filtersTypes =
-    | 'list'
-    | 'int'
-    | 'string'
-
-
-interface NumberData {
-    id: number;
-    number: string;
-    operator_id: number;
-    category_id: number;
-    region_id: number;
-    tariff_cost: number;
-}
-
-interface ResponseData {
-    list: NumberData[];
-}
-
-interface Region {
-    id: number;
-    name: string;
-}
-
-declare global {
-    interface Window {
-        regions: Region[];
-    }
-}
-
 // fixme нужно использовать форматтер ide (ctrl + alt + L)
 export class PhoneNumbers {
     private $numbersList: JQuery<HTMLElement> = $('.numbers__content-list');
     private $numbersFilters: JQuery<HTMLElement> = $('.numbers__filters');
-
     private $numbersLoadMore: JQuery<HTMLElement> = $('.numbers__load-more > button');
     private $numbersForm: JQuery<HTMLElement> = $('.numbers__filters-form');
     private $numbersCount: JQuery<HTMLElement> = $('.numbers__count span');
@@ -51,20 +17,13 @@ export class PhoneNumbers {
     private $overlay: JQuery<HTMLElement> = $('.numbers__overlay');
     private numbersLoadMoreBtn: JQuery<HTMLElement> = $('.numbers__load-more');
 
-    private $inputsForm = this.$numbersForm.find('input');
-    private $selectForm = this.$numbersForm.find('select');
-    private $buttonForm = this.$numbersForm.find('button');
-
 
     private numberCounter: number = 0;
     private page: number = 1;
-
     private filter: NumbersFilter = {};
-    private arrayBtnValues: NumbersFilter = {};
 
     constructor() {
         this.initListeners();
-        // fixme 1: слушатели на документ нужно использовать в исключительных случаях, слушатель нужен на родительский контейнер
         // fixme 2: избегаем излишнего использования асинхронных функций
 
         // fixme overlay должен быть в отдельном классе
@@ -86,7 +45,7 @@ export class PhoneNumbers {
         }).mount();
     }
 
-    private initListeners() {
+    private initListeners():void {
         this.numbersLoadMoreBtn.on('click', 'button', ():void => {
             this.page += this.page;
 
@@ -99,7 +58,6 @@ export class PhoneNumbers {
             this.renderNumbers().then();
         });
 
-        // fixme делегирование событий
         this.$numbersFilters.on('change', '#numbers-free-search', (e: JQuery.ChangeEvent):void => this.getFieldValue("free_search", $(e.currentTarget), "string"));
         this.$numbersFilters.on('click', '#numbers-categories button', (e: JQuery.ClickEvent):void => this.getBtnValue('categories', $(e.currentTarget), 'list'));
         this.$numbersFilters.on('click', '#numbers-operators button', (e: JQuery.ClickEvent):void => this.getBtnValue('operators', $(e.currentTarget), 'list'));
@@ -107,11 +65,13 @@ export class PhoneNumbers {
         this.$numbersFilters.on('change', '#numbers-min_price', (e: JQuery.ChangeEvent):void => this.getFieldValue("min_price", $(e.currentTarget), "int"));
         this.$numbersFilters.on('change', '#numbers-max_price', (e: JQuery.ChangeEvent):void => this.getFieldValue("max_price", $(e.currentTarget), "int"));
 
+        const findElementForm = (selector: string): JQuery<HTMLElement> => this.$numbersForm.find(selector);
 
         this.$numbersFilters.on('click', '#numbers-clear', ():void => {
-            this.$inputsForm.val('');
-            this.$selectForm.val('0');
-            this.$buttonForm.removeClass('numbers__btn--active');
+            findElementForm('input').val('');
+            findElementForm('select').val('0');
+            findElementForm('button').removeClass('numbers__btn--active');
+
             this.filter = {};
             this.updateFilterCount();
         });
@@ -144,8 +104,7 @@ export class PhoneNumbers {
         let value: string | number;
 
         if (type === 'int') {
-            // fixme подобные преобразования должны быть в отдельных классах (Utils), пример: StringUtils.replaceNonNumbers
-            value = String(item.val()).replace(/\D/g, '');
+            value = StringUtils.replaceNonNumbers(item.val() as string);
             value = value === '0' ? "" : Number(value);
         } else {
             value = String(item.val());
@@ -199,8 +158,8 @@ export class PhoneNumbers {
 
             $.each(data.list, (_: number, {number, operator_id, region_id, tariff_cost}: NumberData) => {
                 console.log(window.regions)
-                // fixme работа с получением данных из window должна быть в классе storage, например RegionStorage
-                let region = window.regions.find((i: { id: number, name: string }) => i.id === region_id);
+
+                const region: Region = regionStorage(region_id);
 
                 this.$numbersList.append(`
                              <div class="number-item">
@@ -210,7 +169,7 @@ export class PhoneNumbers {
                                          <div class="number-item__block flex-row">
                                              <div class="number-item__number">${number}</div>
                                              <div class="number-item__expand" data-icon="chevron"></div>
-                                             <div class="label number-item__city">${region.name}</div>
+                                             <div class="label number-item__city">${region}</div>
                                          </div>
                                          <div class="number-item__tariff">Тарифы от ${tariff_cost}</div>
                                      </div>

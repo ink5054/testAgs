@@ -1,4 +1,4 @@
-import {PhoneNumbers} from "@app/js/pages/numbers";
+import {PhoneNumbers} from "@pages/numbers";
 
 $(document).ready(async () => {
     const phoneNumbers: PhoneNumbers = new PhoneNumbers();

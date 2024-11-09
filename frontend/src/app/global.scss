@@ -1,4 +1,4 @@
-@import "@app/styles/component/fonts";
+@import "@shared/ui/assets/fonts";
 
 *{
   font-family: $fontMontserrat;
@@ -80,7 +80,7 @@ input[type="number"] {
   appearance: none;
   -webkit-appearance: none;
   -moz-appearance: none;
-  background-image: url(@app/assets/images/icons/different/chevron.bottom.svg);
+  background-image: url(@shared/assets/images/icons/different/chevron.bottom.svg);
   background-repeat: no-repeat;
   background-position: calc(100% - 15px) center;
 }
