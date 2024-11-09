@@ -12,11 +12,13 @@ const PUBLIC_PATH = '/dist/'
 const SRC_DIR = path.resolve('src')
 const BUILD_DIR = path.resolve('..', 'www', 'dist')
 const BUILD_TWIG_DIR = path.resolve('..', 'backend', 'templates')
-const SRC_HTML_DIR = path.resolve(SRC_DIR, 'html')
+
 
 const LAYER_APP_PATH = path.resolve(SRC_DIR, 'app')
 const LAYER_PAGES_PATH = path.resolve(SRC_DIR, 'pages')
 const LAYER_SHARED_PATH = path.resolve(SRC_DIR, 'shared')
+
+const SRC_HTML_DIR = path.resolve(LAYER_APP_PATH, 'html')
 
 module.exports = {
     mode: 'production',

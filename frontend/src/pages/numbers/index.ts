@@ -169,7 +169,7 @@ export class PhoneNumbers {
                                          <div class="number-item__block flex-row">
                                              <div class="number-item__number">${number}</div>
                                              <div class="number-item__expand" data-icon="chevron"></div>
-                                             <div class="label number-item__city">${region}</div>
+                                             <div class="label number-item__city">${region.name}</div>
                                          </div>
                                          <div class="number-item__tariff">Тарифы от ${tariff_cost}</div>
                                      </div>
