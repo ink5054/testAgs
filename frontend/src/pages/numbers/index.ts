@@ -108,7 +108,6 @@ export class PhoneNumbers {
     }
 
     private btnNumbersLoadState(count: number): void {
-        console.log(count);
         this.$numbersLoadMoreBtn.toggleClass('hidden', count < 10);
     }
 
@@ -120,11 +119,11 @@ export class PhoneNumbers {
         return request("POST", this.page, this.filter);
     }
 
-    renderNumbers():void {
+    renderNumbers(): void {
         this.$numbersLoadMoreBtn.addClass('hidden');
         Preloader.show();
 
-        this.getNumbers().then((response: ResponseData):void => {
+        this.getNumbers().then((response: ResponseData): void => {
             const data: ResponseData = response;
 
             const count: number = data.list.length;
@@ -132,8 +131,7 @@ export class PhoneNumbers {
             this.numberCounter += count;
             this.$numbersCount.text(this.numberCounter);
 
-            $.each(data.list, (_: number, {number, operator_id, region_id, tariff_cost}: NumberData) => {
-
+            $.each(data.list, (_: number, {number, operator_id, region_id, tariff_cost}: NumberData): void => {
 
                 const region: Region = regionStorage(region_id);
 
@@ -154,10 +152,10 @@ export class PhoneNumbers {
                                 `);
             });
         })
-            .catch((error: any):void => {
+            .catch((error: any): void => {
                 console.error('Error:', error);
             })
-            .always(():void => {
+            .always((): void => {
                 Preloader.hide();
                 if (Device.isMobile()) hideOverlay();
             });
