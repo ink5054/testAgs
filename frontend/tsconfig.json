@@ -15,7 +15,7 @@
       "@pages/*": ["pages/*"],
       "@widgets/*": ["widgets/*"],
       "@features/*": ["features/*"],
-      "@entilies/*": ["entilies/*"],
+      "@entities/*": ["entities/*"],
       "@shared/*": ["shared/*"]
     }
   }
