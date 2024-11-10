@@ -4,7 +4,7 @@ import createSplideInstance from '@widgets/splide';
 import {StringUtils} from '@shared/util/StringUtils';
 import {NumbersFilter, filtersTypes, ResponseData, NumberData, Region} from '@pages/numbers/interface';
 import {regionStorage} from "@app/storage";
-import { showOverlay, hideOverlay } from '@widgets/overlay';
+import {showOverlay, hideOverlay} from '@widgets/overlay';
 
 // fixme нужно использовать форматтер ide (ctrl + alt + L)
 export class PhoneNumbers {
@@ -117,7 +117,7 @@ export class PhoneNumbers {
     }
 
 
-    getNumbers() {
+    private getNumbers() {
         //fixme
         return $.ajax({
             method: "POST",
@@ -128,25 +128,26 @@ export class PhoneNumbers {
             async: false
         })
     }
+
     renderNumbers() {
         this.$numbersLoadMoreBtn.addClass('hidden');
 
-            this.getNumbers().then((response: ResponseData)=> {
-                Preloader.show();
+        this.getNumbers().then((response: ResponseData) => {
+            Preloader.show();
 
-                const data: ResponseData = response;
+            const data: ResponseData = response;
 
-                const count: number = data.list.length;
-                this.btnNumbersLoadState(count);
-                this.numberCounter += count;
-                this.$numbersCount.text(this.numberCounter);
+            const count: number = data.list.length;
+            this.btnNumbersLoadState(count);
+            this.numberCounter += count;
+            this.$numbersCount.text(this.numberCounter);
 
-                $.each(data.list, (_: number, {number, operator_id, region_id, tariff_cost}: NumberData) => {
+            $.each(data.list, (_: number, {number, operator_id, region_id, tariff_cost}: NumberData) => {
 
 
-                    const region: Region = regionStorage(region_id);
+                const region: Region = regionStorage(region_id);
 
-                    this.$numbersList.append(`
+                this.$numbersList.append(`
                                  <div class="number-item">
                                     <div class="number-item__data flex-row">
                                          <div class="operator-icon number-item__icon" data-id="${operator_id}"></div>
@@ -161,13 +162,13 @@ export class PhoneNumbers {
                                      </div>
                                  </div>
                                 `);
-                });
+            });
 
-                Preloader.hide();
-                if (Device.isMobile()) hideOverlay();
-            }).catch(function(error) {
-                console.error('Error:', error);
-            })
+            Preloader.hide();
+            if (Device.isMobile()) hideOverlay();
+        }).catch(function (error) {
+            console.error('Error:', error);
+        })
 
     }
 }
