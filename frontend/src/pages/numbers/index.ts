@@ -2,9 +2,10 @@ import {Device} from "@app/Device";
 import * as Preloader from "@widgets/preloader";
 import createSplideInstance from '@widgets/splide';
 import {StringUtils} from '@shared/util/StringUtils';
-import {NumbersFilter, filtersTypes, ResponseData, NumberData, Region} from '@pages/numbers/interface';
+import {NumbersFilter, filtersTypes, ResponseData, NumberData, Region} from '@pages/numbers/types/Numbers.interface';
 import {regionStorage} from "@app/storage";
 import {showOverlay, hideOverlay} from '@widgets/overlay';
+import {request} from "@shared/api/request";
 
 // fixme нужно использовать форматтер ide (ctrl + alt + L)
 export class PhoneNumbers {
@@ -118,23 +119,14 @@ export class PhoneNumbers {
 
 
     private getNumbers() {
-        //fixme
-        return $.ajax({
-            method: "POST",
-            url: "/numbers/page/" + this.page,
-            dataType: "json",
-            contentType: "application/json; charset=utf-8",
-            data: JSON.stringify(this.filter),
-            async: false
-        })
+        return request("POST", this.page, this.filter);
     }
 
     renderNumbers() {
         this.$numbersLoadMoreBtn.addClass('hidden');
+        Preloader.show();
 
         this.getNumbers().then((response: ResponseData) => {
-            Preloader.show();
-
             const data: ResponseData = response;
 
             const count: number = data.list.length;
@@ -163,12 +155,13 @@ export class PhoneNumbers {
                                  </div>
                                 `);
             });
-
-            Preloader.hide();
-            if (Device.isMobile()) hideOverlay();
-        }).catch(function (error) {
-            console.error('Error:', error);
         })
-
+            .catch((error: any) => {
+                console.error('Error:', error);
+            })
+            .always(() => {
+                Preloader.hide();
+                if (Device.isMobile()) hideOverlay();
+            });
     }
 }
