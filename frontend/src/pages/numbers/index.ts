@@ -7,7 +7,7 @@ import {regionStorage} from "@app/storage";
 import {showOverlay, hideOverlay} from '@widgets/overlay';
 import {request} from "@shared/api/request";
 
-// fixme нужно использовать форматтер ide (ctrl + alt + L)
+// нужно использовать форматтер ide (ctrl + alt + L)
 export class PhoneNumbers {
     private $numbersContent: JQuery<HTMLElement> = $('.numbers__content');
     private $numbersList: JQuery<HTMLElement> = $('.numbers__content-list');
@@ -47,6 +47,7 @@ export class PhoneNumbers {
         this.$numbersFilters.on('change', '#numbers-max_price', (e: JQuery.ChangeEvent): void => this.getFieldValue("max_price", $(e.currentTarget), "int"));
 
         const findElementForm = (selector: string): JQuery<HTMLElement> => this.$numbersForm.find(selector);
+
 
         this.$numbersFilters.on('click', '#numbers-clear', (): void => {
             findElementForm('input').val('');
@@ -94,9 +95,7 @@ export class PhoneNumbers {
             value = String(item.val());
         }
 
-
         this.setFilter(name, value, type);
-
     }
 
     private getBtnValue(name: string, item: JQuery<HTMLElement>, type: filtersTypes): void {
@@ -117,16 +116,15 @@ export class PhoneNumbers {
         this.$filtersCount.text(Object.keys(this.filter).length);
     }
 
-
     private getNumbers() {
         return request("POST", this.page, this.filter);
     }
 
-    renderNumbers() {
+    renderNumbers():void {
         this.$numbersLoadMoreBtn.addClass('hidden');
         Preloader.show();
 
-        this.getNumbers().then((response: ResponseData) => {
+        this.getNumbers().then((response: ResponseData):void => {
             const data: ResponseData = response;
 
             const count: number = data.list.length;
@@ -156,10 +154,10 @@ export class PhoneNumbers {
                                 `);
             });
         })
-            .catch((error: any) => {
+            .catch((error: any):void => {
                 console.error('Error:', error);
             })
-            .always(() => {
+            .always(():void => {
                 Preloader.hide();
                 if (Device.isMobile()) hideOverlay();
             });
