@@ -1,4 +1,4 @@
-import {requestData} from "@shared/api/types/request.interface";
+import {requestData} from "@shared/api/types/Request.interface";
 
 export function request(method: string, page: number, data: requestData){
     return $.ajax({
