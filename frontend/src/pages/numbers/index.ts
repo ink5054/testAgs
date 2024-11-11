@@ -3,7 +3,7 @@ import * as Preloader from "@widgets/preloader";
 import createSplideInstance from '@widgets/splide';
 import {StringUtils} from '@shared/util/StringUtils';
 import {NumbersFilter, filtersTypes, ResponseData, NumberData, Region} from '@pages/numbers/types/Numbers.interface';
-import {regionStorage} from "@entities/region/model/regionStorage";
+import {regionStorage} from "@entities/region/model/RegionStorage";
 import {showOverlay, hideOverlay} from '@widgets/overlay';
 import {request} from "@shared/api/request";
 
